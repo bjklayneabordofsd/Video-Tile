@@ -1,0 +1,63 @@
+{% extends "core/base.html" %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'style/home.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="grid">
+    {% for video in videos %}
+    <div class="grid-item">
+        <div class="video-tile" data-video-id="{{ video.pk }}">
+            <div class="overlay">
+                <div class="play"><i class="fa fa-play" aria-hidden="true"></i></div>
+            </div>
+            <div class="image">
+                <video id="video-{{ video.pk }}" controls autoplay loop playsinline>
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                </video>
+            </div>
+            <div class="info">
+                <div class="title">{{video.title}}</div>
+                <!-- <div class="views">112<br />views</div> -->
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.play').click(function (event) {
+            event.stopPropagation();
+            var videoId = $(this).closest('.video-tile').data('video-id');
+            console.log("Video ID:", videoId); // Debug line
+            var videoElement = document.getElementById('video-' + videoId);
+            console.log("Video Element:", videoElement); // Debug line
+            if (videoElement) {
+                if (videoElement.requestFullscreen) {
+                    videoElement.requestFullscreen();
+                } else if (videoElement.mozRequestFullScreen) { // Firefox
+                    videoElement.mozRequestFullScreen();
+                } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    videoElement.webkitRequestFullscreen();
+                } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                    videoElement.msRequestFullscreen();
+                }
+                videoElement.play();
+            } else {
+                console.error("Video element not found");
+            }
+        });
+    });
+</script>
+
+
+{% endblock content %}
+
+
+{% block script %}
+
+{% endblock script %}

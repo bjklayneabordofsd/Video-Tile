@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from django.core.validators import FileExtensionValidator
 
@@ -17,3 +18,7 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def delete(self, *args, **kwargs):
+        self.video_file.delete()
+        super().delete(*args, **kwargs)
